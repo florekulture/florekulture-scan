@@ -40,6 +40,34 @@
     button:hover {
       background-color: #115e59;
     }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 12px;
+      width: 80%;
+      max-width: 300px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -50,13 +78,42 @@
     <button onclick="goToProduct()">Go</button>
   </div>
 
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <p id="modalMessage"></p>
+    </div>
+  </div>
+
   <script>
+    const validCodes = ["4056456350", "1234567890"]; // Add more later
+
     function goToProduct() {
       const code = document.getElementById("barcode").value.trim();
-      if (code) {
-        window.location.href = `https://www.florekulture.com/${code}`;
+      if (validCodes.includes(code)) {
+        showModal("Verified! Redirecting...");
+        setTimeout(() => {
+          window.location.href = `https://www.florekulture.com/${code}`;
+        }, 1500);
       } else {
-        alert("Please enter a valid product ID.");
+        showModal("Your serial number is not verified.");
+      }
+    }
+
+    function showModal(message) {
+      document.getElementById("modalMessage").textContent = message;
+      document.getElementById("modal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById("modal");
+      if (event.target === modal) {
+        modal.style.display = "none";
       }
     }
   </script>
